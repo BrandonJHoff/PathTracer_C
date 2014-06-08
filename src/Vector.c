@@ -22,6 +22,11 @@ float dotVector(Vector* v1, Vector* v2){
     return v1->x * v2->x + v1->y * v2->y + v1->z * v2->z;
 }
 
+Vector multiplyVectorByNumber(Vector* v, float num){
+    Vector result = {v->x*num, v->y*num, v->z*num};
+    return result;
+}
+
 Vector divideVectorByNumber(Vector* v, float num){
     Vector result = {v->x/num, v->y/num, v->z/num};
     return result;

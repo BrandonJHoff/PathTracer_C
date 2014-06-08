@@ -14,6 +14,7 @@ void normalizeVector(Vector* v);
 Vector crossVector(Vector* v1, Vector* v2);
 float dotVector(Vector* v1, Vector* v2);
 
+Vector multiplyVectorByNumber(Vector* v, float num);
 Vector divideVectorByNumber(Vector* v, float num);
 
 
