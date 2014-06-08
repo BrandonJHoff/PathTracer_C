@@ -1,4 +1,4 @@
-#include "../src/Color.h"
+#include "../src/utils/Color.h"
 #include "../src/Image.h"
 #include <stdlib.h>
 

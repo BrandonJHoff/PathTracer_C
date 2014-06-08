@@ -1,7 +1,7 @@
 #ifndef _IMAGE_H_
 #define _IMAGE_H_
 
-#include "Color.h"
+#include "utils/Color.h"
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
