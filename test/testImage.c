@@ -1,4 +1,4 @@
-#include "../src/utils/Color.h"
+#include "../src/Color.h"
 #include "../src/Image.h"
 #include <stdlib.h>
 
@@ -15,7 +15,7 @@ void createColoredImage(Image* img, Color color){
 int main(){
 
     Image img = {500, 500, NULL};
-    Color color = {1.0, 0.0, 0.0};
+    Color color = {255, 0, 255};
 
     createColoredImage(&img, color);
     writeImage(&img, "test.ppm");
