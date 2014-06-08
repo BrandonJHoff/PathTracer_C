@@ -1,5 +1,5 @@
-#include "Color.h"
-#include "Image.h"
+#include "../src/Color.h"
+#include "../src/Image.h"
 #include <stdlib.h>
 
 void createColoredImage(Image* img, Color color){
