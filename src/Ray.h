@@ -8,8 +8,6 @@ typedef struct Ray {
     Vector direction;
 } Ray;
 
-Vector pointOnRay(Ray r, float t){
-    return addVectorByVector(r.origin, multiplyVectorByNumber(r.direction, t));
-}
+Vector pointOnRay(Ray r, float t);
 
 #endif
