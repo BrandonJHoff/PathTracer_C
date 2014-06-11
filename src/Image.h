@@ -12,6 +12,7 @@ typedef struct Image {
 	Color** pixels;
 } Image;
 
+Image createImage(int width, int height);
 bool setImageColor(Image* img, int x, int y, const Color color);
 void writeImage(Image* img, char* filename);
 void freeImage(Image* img);

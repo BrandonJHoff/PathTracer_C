@@ -1,5 +1,10 @@
 #include "Triangle.h"
 
+Triangle createTriangle(Color color, Vector point1, Vector point2, Vector point3){
+	Triangle tri = {color, point1, point2, point3};
+	return tri;
+}
+
 bool hitTriangle(Triangle* tri, HitRecord* record, Ray* ray){
 
 	Vector edge1 = minusVectorByVector(tri->point1, tri->point3);

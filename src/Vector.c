@@ -1,5 +1,10 @@
 #include "Vector.h"
 
+Vector createVector(float _x, float _y, float _z){
+    Vector result = {_x, _y, _z};
+    return result;
+}
+
 float lengthOfVector(Vector v){
     return sqrt(v.x*v.x + v.y*v.y + v.z*v.z);
 }

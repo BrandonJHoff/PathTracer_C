@@ -2,12 +2,15 @@
 #define _VECTOR_H_
 
 #include <math.h>
+#include <stdio.h>
 
 typedef struct Vector {
     float x;
     float y;
     float z;
 } Vector;
+
+Vector createVector(float _x, float _y, float _z);
 
 float lengthOfVector(Vector v);
 Vector normalizeVector(Vector v);
