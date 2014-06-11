@@ -32,9 +32,9 @@ void writeImage(Image* img, char* filename){
 	for(int j = 0; j < img->height; j++){
 		for(int i = 0; i < img->width; i++){
 			static unsigned char color[3];
-	        color[0] = (unsigned char)img->pixels[i][j].red;
-	        color[1] = (unsigned char)img->pixels[i][j].green;
-	        color[2] = (unsigned char)img->pixels[i][j].blue;
+	        color[0] = (unsigned char)(img->pixels[i][j].red * 255);
+	        color[1] = (unsigned char)(img->pixels[i][j].green * 255);
+	        color[2] = (unsigned char)(img->pixels[i][j].blue * 255);
 	        (void) fwrite(color, 1, 3, out);
 		}
 	}
