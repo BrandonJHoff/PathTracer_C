@@ -11,10 +11,11 @@ typedef struct Scene {
     Camera camera;
     Image image;
     //Sample* samples;
-    //Light* lights;
+    Triangle* lights;
     int max_depth;
     int num_samples;
     int num_triangles;
+    int num_lights;
 } Scene;
 
 Scene loadScene(char* filename);

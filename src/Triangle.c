@@ -50,3 +50,11 @@ void calculateTriangleNormal(Triangle* tri){
     tri->normal = crossVector(minusVectorByVector(tri->point1, tri->point3), minusVectorByVector(tri->point2, tri->point3));
     tri->normal = normalizeVector(tri->normal);
 }
+
+Vector getPointOnTriangle(Triangle* tri){
+	double val = (double)rand()/(double)RAND_MAX;
+	float random1 = (double)rand()/(double)RAND_MAX;
+	float random2 = (double)rand()/(double)RAND_MAX;
+	Vector point = addVectorByVector(addVectorByVector(multiplyVectorByNumber(tri->point1, 1 - sqrt(random1)), multiplyVectorByNumber(tri->point2, sqrt(random1)*(1 - random2))), multiplyVectorByNumber(tri->point3, random2*sqrt(random1)));
+	return point;
+}

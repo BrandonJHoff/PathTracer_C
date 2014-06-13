@@ -16,8 +16,9 @@ Scene loadScene(char* filename){
     Color green = {.25, .95, .25};
     Color white = {.95, .95, .85};
     Color blue = {.25, .25, .95};
+    Color light = {.9, .9, .9};
 
-    scene.num_triangles = 30;
+    scene.num_triangles = 32;
     scene.triangles = malloc(scene.num_triangles * sizeof(Triangle));
 
     // Right Wall
@@ -64,15 +65,23 @@ Scene loadScene(char* filename){
     scene.triangles[28] = createTriangle(blue, createVector(265.0, 0.0, 296.0), createVector(256.0, 330.0, 296.0), createVector(423.0, 330.0, 247.0));
     scene.triangles[29] = createTriangle(blue, createVector(265.0, 0.0, 296.0), createVector(423.0, 330.0, 247.0), createVector(423.0, 0.0, 247.0));
 
+    // Area Light
+    scene.triangles[30] = createTriangle(light, createVector(343.0, 548.8, 227.0), createVector(343.0, 548.8, 332.0), createVector(213.0, 548.8, 332.0));
+    scene.triangles[31] = createTriangle(light, createVector(343.0, 548.8, 227.0), createVector(213.0, 548.8, 332.0), createVector(213.0, 548.8, 227.0));
+
+    scene.num_lights = 2;
+    scene.lights = malloc(scene.num_lights * sizeof(Triangle));
+    scene.lights[0] = scene.triangles[30];
+    scene.lights[1] = scene.triangles[31];
+
     return scene;
 }
 
 void renderScene(Scene* scene){
 	Color result;
-	HitRecord record;
+	HitRecord record = createHitRecord();
 
     Color black = {0, 0, 0};
-    Color red = {1, 0, 0};
 
     int xres = scene->image.width;
     int yres = scene->image.height;
@@ -88,10 +97,14 @@ void renderScene(Scene* scene){
             result = black;
 
             for(int k = 0; k < scene->num_triangles; k++){
-        		if(hitTriangle(&scene->triangles[k], &record, &ray)){
-        			result = record.triangle->color;
-        		}
+                hitTriangle(&scene->triangles[k], &record, &ray);
         	}
+
+            if(record.has_hit){
+                //record.triangle.material.shade();
+                result = record.triangle->color;
+            }
+
 
 			setImageColor(&scene->image, i, j, result);
 		}

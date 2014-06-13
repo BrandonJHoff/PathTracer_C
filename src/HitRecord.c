@@ -1,10 +1,16 @@
 #include "HitRecord.h"
 
+HitRecord createHitRecord(){
+    HitRecord record = {MAX_T, createVector(0,0,0), createVector(0,0,0), createVector(0,0,0)};
+    return record;
+}
+
 void resetHitRecord(HitRecord* record){
-    record->t = 100000.0;
-    record->uvw = (Vector){0, 0, 0};
-    record->point = (Vector){0, 0, 0};
-    record->normal = (Vector){0, 0, 0};
+    record->t = MAX_T;
+    record->uvw = createVector(0,0,0);
+    record->point = createVector(0,0,0);
+    record->normal = createVector(0,0,0);
+    record->has_hit = false;
 }
 
 bool updateHitRecord(HitRecord* record, double hit_t, struct Triangle* triangle, Ray* ray){
@@ -12,7 +18,7 @@ bool updateHitRecord(HitRecord* record, double hit_t, struct Triangle* triangle,
 		record->t = hit_t;
 		record->triangle = triangle;
 		record->point = pointOnRay(*ray, hit_t);
-		//mat = hit_obj->mat;
+		record->has_hit = true;
 		return true;
 	}
 	return false;
