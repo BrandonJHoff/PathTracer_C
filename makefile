@@ -1,14 +1,17 @@
 APP_NAME   = render
 C_FLAGS  = -c
 
-$(APP_NAME): Camera.o Color.o HitRecord.o Image.o main.o Material.o Ray.o Sample.o Scene.o Triangle.o Vector.o
-	gcc Camera.o Color.o HitRecord.o Image.o main.o Material.o Ray.o Sample.o Scene.o Triangle.o Vector.o -o $(APP_NAME)
+$(APP_NAME): Camera.o Color.o Filter.o HitRecord.o Image.o main.o Material.o Ray.o Sample.o Scene.o Triangle.o Vector.o
+	gcc Camera.o Color.o Filter.o HitRecord.o Image.o main.o Material.o Ray.o Sample.o Scene.o Triangle.o Vector.o -o $(APP_NAME)
 
 Camera.o: src/Camera.c
 	gcc $(C_FLAGS) src/Camera.c
 
 Color.o: src/Color.c
 	gcc $(C_FLAGS) src/Color.c
+
+Filter.o: src/Filter.c
+	gcc $(C_FLAGS) src/Filter.c
 
 HitRecord.o: src/HitRecord.c
 	gcc $(C_FLAGS) src/HitRecord.c

@@ -7,6 +7,7 @@
 #include "HitRecord.h"
 #include "Material.h"
 #include "Sample.h"
+#include "Filter.h"
 
 struct Material;
 struct Triangle;

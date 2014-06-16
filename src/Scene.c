@@ -96,6 +96,7 @@ void renderScene(Scene* scene){
 		for(int j = 0; j < yres; j++){
 
             getSamples(&sample);
+            applyFilter(&sample);
 
             result = black;
 
