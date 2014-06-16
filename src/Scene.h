@@ -6,6 +6,7 @@
 #include "Image.h"
 #include "HitRecord.h"
 #include "Material.h"
+#include "Sample.h"
 
 struct Material;
 struct Triangle;
@@ -16,7 +17,6 @@ typedef struct Scene {
     struct Triangle* triangles;
     struct Triangle* lights;
     struct Material* materials;
-    //Sample* samples;
     int max_depth;
     int num_samples;
     int num_triangles;

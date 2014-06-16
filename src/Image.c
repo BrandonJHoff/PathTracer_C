@@ -32,15 +32,17 @@ bool setImageColor(Image* img, int x, int y, Color color){
 }
 
 void writeImage(Image* img, char* filename){
+	Color c;
     FILE* out = fopen(filename, "wb");
     (void) fprintf(out, "P6\n%d %d\n255\n", img->width, img->height);
 
 	for(int j = 0; j < img->height; j++){
 		for(int i = 0; i < img->width; i++){
 			static unsigned char color[3];
-	        color[0] = (unsigned char)(img->pixels[i][j].red * 255);
-	        color[1] = (unsigned char)(img->pixels[i][j].green * 255);
-	        color[2] = (unsigned char)(img->pixels[i][j].blue * 255);
+			c = checkColorLevels(img->pixels[i][j]);
+	        color[0] = (unsigned char)(c.red * 255);
+	        color[1] = (unsigned char)(c.green * 255);
+	        color[2] = (unsigned char)(c.blue * 255);
 	        (void) fwrite(color, 1, 3, out);
 		}
 	}

@@ -3,7 +3,7 @@
 Scene createScene(char* filename){
     Scene scene = {};
     scene.max_depth = 10;
-    scene.num_samples = 4;
+    scene.num_samples = 16;
 
     scene.image = createImage(500, 500);
 
@@ -85,6 +85,7 @@ void destroyScene(Scene* scene){
 void renderScene(Scene* scene){
 	Color result;
 	HitRecord record = createHitRecord();
+    Sample sample = createSample(scene->num_samples);
 
     Color black = {0, 0, 0};
 
@@ -94,20 +95,27 @@ void renderScene(Scene* scene){
 	for(int i = 0; i < xres; i++){
 		for(int j = 0; j < yres; j++){
 
-			double x = 2 * (i - xres/2. + 0.5)/xres;
-			double y = 2 * (j - yres/2. + 0.5)/yres;
+            getSamples(&sample);
 
-            Ray ray = cameraCreateRay(&scene->camera, x, -y);
-            resetHitRecord(&record);
             result = black;
 
-            for(int k = 0; k < scene->num_triangles; k++){
-                hitTriangle(&scene->triangles[k], &record, ray);
-        	}
+            for(int k = 0; k < scene->num_samples; k++){
+                double x = 2 * (i - xres/2. + sample.samples[k].x)/xres;
+                double y = 2 * (j - yres/2. + sample.samples[k].y)/yres;
 
-            if(record.has_hit){
-                result = shadeWithMaterial(scene, &record, ray);
+                Ray ray = cameraCreateRay(&scene->camera, x, -y);
+                resetHitRecord(&record);
+
+                for(int k = 0; k < scene->num_triangles; k++){
+                    hitTriangle(&scene->triangles[k], &record, ray);
+                }
+
+                if(record.has_hit){
+                    result = addColors(result, shadeWithMaterial(scene, &record, ray));
+                }
             }
+
+            result = multiplyColorByNumber(result, 1.0 / (double)scene->num_samples);
 
 			setImageColor(&scene->image, i, j, result);
 		}
