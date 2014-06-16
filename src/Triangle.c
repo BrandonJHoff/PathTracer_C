@@ -1,15 +1,16 @@
 #include "Triangle.h"
 
-Triangle createTriangle(Color color, Vector point1, Vector point2, Vector point3){
-	Triangle tri = {color, point1, point2, point3};
+Triangle createTriangle(struct Material* material, Vector point1, Vector point2, Vector point3){
+	Triangle tri = {material, point1, point2, point3, createVector(0,0,0)};
+	calculateTriangleNormal(&tri);
 	return tri;
 }
 
-bool hitTriangle(Triangle* tri, HitRecord* record, Ray* ray){
+bool hitTriangle(Triangle* tri, struct HitRecord* record, Ray ray){
 
 	Vector edge1 = minusVectorByVector(tri->point1, tri->point3);
 	Vector edge2 = minusVectorByVector(tri->point2, tri->point3);
-	Vector r1 = crossVector(ray->direction, edge2);
+	Vector r1 = crossVector(ray.direction, edge2);
 
 	float denom = dotVector(edge1, r1);
 
@@ -19,7 +20,7 @@ bool hitTriangle(Triangle* tri, HitRecord* record, Ray* ray){
 
 	float invDenom = 1/denom;
 
-	Vector s = minusVectorByVector(ray->origin, tri->point3);
+	Vector s = minusVectorByVector(ray.origin, tri->point3);
 	float b1 = dotVector(s, r1)*invDenom;
 
 	if((b1 < 0) || (b1 > 1)){
@@ -27,7 +28,7 @@ bool hitTriangle(Triangle* tri, HitRecord* record, Ray* ray){
 	}
 
 	Vector r2 = crossVector(s, edge1);
-	float b2 = dotVector(ray->direction, r2)*invDenom;
+	float b2 = dotVector(ray.direction, r2)*invDenom;
 
 	if((b2 < 0) || ((b1 + b2) > 1)){
 		return false;
@@ -36,10 +37,7 @@ bool hitTriangle(Triangle* tri, HitRecord* record, Ray* ray){
 	float t = dotVector(edge2, r2)*invDenom;
 
 	if(updateHitRecord(record, t, tri, ray)){
-		record->uvw.x = b1;
-		record->uvw.y = b2;
-		record->uvw.z = 1 - b1 - b2;
-        record->uvw = normalizeVector(record->uvw);
+        record->uvw = normalizeVector(createVector(b1, b2, 1 - b1 - b2));
 		return true;
 	}
 

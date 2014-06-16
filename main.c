@@ -3,10 +3,10 @@
 
 int main(){
 
-    Scene scene = loadScene("test.txt");
+    Scene scene = createScene("test.txt");
     renderScene(&scene);
     writeImage(&scene.image, "test.ppm");
-    freeImage(&scene.image);
+    destroyScene(&scene);
 
     return 0;
 }

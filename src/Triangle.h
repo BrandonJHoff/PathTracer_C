@@ -2,22 +2,25 @@
 #define _TRIANGLE_H_
 
 #include "Vector.h"
-#include "HitRecord.h"
 #include "Ray.h"
-#include "Color.h"
+#include "HitRecord.h"
 #include <stdbool.h>
 #include <stdlib.h>
 
+struct HitRecord;
+struct Material;
+
 typedef struct Triangle {
-    Color color;
+    struct Material* material;
     Vector point1;
     Vector point2;
     Vector point3;
     Vector normal;
 } Triangle;
 
-Triangle createTriangle(Color color, Vector point1, Vector point2, Vector point3);
-bool hitTriangle(Triangle* tri, struct HitRecord* record, Ray* ray);
+Triangle createTriangle(struct Material* material, Vector point1, Vector point2, Vector point3);
+void destroyTriangle(Triangle* tri);
+bool hitTriangle(Triangle* tri, struct HitRecord* record, Ray ray);
 void calculateTriangleNormal(Triangle* tri);
 Vector getPointOnTriangle(Triangle* tri);
 

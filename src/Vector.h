@@ -16,6 +16,8 @@ float lengthOfVector(Vector v);
 Vector normalizeVector(Vector v);
 Vector crossVector(Vector v1, Vector v2);
 float dotVector(Vector v1, Vector v2);
+Vector negateVector(Vector v);
+float distanceBetweenVectors(Vector v1, Vector v2);
 
 Vector addVectorByVector(Vector v1, Vector v2);
 Vector minusVectorByVector(Vector v1, Vector v2);

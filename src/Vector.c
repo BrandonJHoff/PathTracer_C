@@ -28,6 +28,15 @@ float dotVector(Vector v1, Vector v2){
     return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
 }
 
+Vector negateVector(Vector v){
+    Vector result = {-1*v.x, -1*v.y, -1*v.z};
+    return result;
+}
+
+float distanceBetweenVectors(Vector v1, Vector v2){
+    return lengthOfVector(minusVectorByVector(v1, v2));
+}
+
 Vector addVectorByVector(Vector v1, Vector v2){
     Vector result = {v1.x + v2.x, v1.y + v2.y, v1.z + v2.z};
     return result;

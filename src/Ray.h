@@ -2,12 +2,14 @@
 #define _RAY_H_
 
 #include "Vector.h"
+#include <stdlib.h>
 
 typedef struct Ray {
     Vector origin;
     Vector direction;
 } Ray;
 
-Vector pointOnRay(Ray r, float t);
+Ray createRay(Vector origin, Vector direction);
+Vector pointOnRay(Ray ray, float t);
 
 #endif

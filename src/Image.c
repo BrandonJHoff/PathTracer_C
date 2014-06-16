@@ -5,10 +5,10 @@ Image createImage(int width, int height){
 
 	Image img = {width, height, NULL};
 
-	img.pixels = malloc(img.width * sizeof(Color));
-	for(int i = 0; i < img.width; i++){
-		img.pixels[i] = malloc(img.height * sizeof(Color));
-		for(int j = 0; j < img.height; j++){
+	img.pixels = malloc(width * sizeof(Color));
+	for(int i = 0; i < width; i++){
+		img.pixels[i] = malloc(height * sizeof(Color));
+		for(int j = 0; j < height; j++){
 			img.pixels[i][j] = black;
 		}
 	}
@@ -16,7 +16,14 @@ Image createImage(int width, int height){
 	return img;
 }
 
-bool setImageColor(Image* img, int x, int y, const Color color){
+void destroyImage(Image* img){
+	for(int i = 0; i < img->width; i++){
+		free(img->pixels[i]);
+	}
+	free(img->pixels);
+}
+
+bool setImageColor(Image* img, int x, int y, Color color){
 	if(0 > x || x > img->width) return false;
 	if(0 > y || y > img->height) return false;
 
@@ -25,7 +32,6 @@ bool setImageColor(Image* img, int x, int y, const Color color){
 }
 
 void writeImage(Image* img, char* filename){
-
     FILE* out = fopen(filename, "wb");
     (void) fprintf(out, "P6\n%d %d\n255\n", img->width, img->height);
 
@@ -40,11 +46,5 @@ void writeImage(Image* img, char* filename){
 	}
 
 	(void) fclose(out);
-}
-
-void freeImage(Image* img){
-    for(int i = 0; i < img->width; i++){
-        free(img->pixels[i]);
-    }
-    free(img->pixels);
+	return;
 }

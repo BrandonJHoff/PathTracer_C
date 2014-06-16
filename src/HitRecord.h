@@ -3,23 +3,25 @@
 
 #include "Vector.h"
 #include "Ray.h"
+#include "Triangle.h"
 #include <stdbool.h>
-
-struct Triangle;
+#include <stddef.h>
 
 #define MAX_T 100000.0
 
+struct Triangle;
+
 typedef struct HitRecord {
-    double t;
     Vector uvw;
     Vector point;
     Vector normal;
     struct Triangle* triangle;
+    double t;
     bool has_hit;
 } HitRecord;
 
 HitRecord createHitRecord();
 void resetHitRecord(HitRecord* record);
-bool updateHitRecord(HitRecord* record, double hit_t, struct Triangle* triangle, Ray* ray);
+bool updateHitRecord(HitRecord* record, double hit_t, struct Triangle* triangle, Ray ray);
 
 #endif

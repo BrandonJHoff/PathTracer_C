@@ -13,8 +13,8 @@ typedef struct Image {
 } Image;
 
 Image createImage(int width, int height);
-bool setImageColor(Image* img, int x, int y, const Color color);
+void destroyImage(Image* img);
+bool setImageColor(Image* img, int x, int y, Color color);
 void writeImage(Image* img, char* filename);
-void freeImage(Image* img);
 
 #endif
