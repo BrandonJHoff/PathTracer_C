@@ -14,9 +14,12 @@ typedef struct Material {
     Color color;
     float Kd;
     float Ka;
+    bool is_light;
 } Material;
 
-Material createMaterial(Color color, float Kd, float Ka);
-Color shadeWithMaterial(struct Scene* scene, struct HitRecord* record, Ray ray);
+Material createMaterial(Color color, float Kd, float Ka, bool is_light);
+Color shadeWithMaterial(struct Scene* scene, struct HitRecord* record, Ray ray, int depth);
+Vector getDiffuseDirection(Vector normal);
+Vector getLightDirection(struct Scene* scene, Vector position);
 
 #endif

@@ -28,5 +28,6 @@ typedef struct Scene {
 Scene createScene(char* filename);
 void destroyScene(Scene* scene);
 void renderScene(Scene* scene);
+Color hitScene(struct Scene* scene, struct HitRecord* record, Ray ray, int depth);
 
 #endif

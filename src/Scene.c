@@ -3,7 +3,7 @@
 Scene createScene(char* filename){
     Scene scene = {};
     scene.max_depth = 10;
-    scene.num_samples = 16;
+    scene.num_samples = 100;
 
     scene.image = createImage(500, 500);
 
@@ -15,12 +15,12 @@ Scene createScene(char* filename){
     scene.num_materials = 4;
     scene.materials = malloc(scene.num_materials * sizeof(Material));
 
-    scene.materials[0] = createMaterial(createColor(.95, .25, .25), .6, .4);
-    scene.materials[1] = createMaterial(createColor(.25, .95, .25), .6, .4);
-    scene.materials[2] = createMaterial(createColor(.95, .95, .85), .6, .4);
-    scene.materials[3] = createMaterial(createColor(.9, .9, .9), .6, .4);
+    scene.materials[0] = createMaterial(createColor(.95, .25, .25), .6, .4, false);
+    scene.materials[1] = createMaterial(createColor(.25, .95, .25), .6, .4, false);
+    scene.materials[2] = createMaterial(createColor(.95, .95, .85), .6, .4, false);
+    scene.materials[3] = createMaterial(createColor(.9, .9, .9), .6, .4, true);
 
-    scene.num_triangles = 30;
+    scene.num_triangles = 32;
     scene.triangles = malloc(scene.num_triangles * sizeof(Triangle));
 
     // Right Wall
@@ -36,8 +36,8 @@ Scene createScene(char* filename){
     scene.triangles[5] = createTriangle(&scene.materials[0], createVector(556.0, 0.0, 0.0), createVector(556.0, 548.8, 559.2), createVector(556.0, 548.8, 0.0));
 
     // Ceiling
-    scene.triangles[6] = createTriangle(&scene.materials[2], createVector(556.0, 548.8, 0.0), createVector(0.0, 548.8, 0.0), createVector(0.0, 548.8, 559.2));
-    scene.triangles[7] = createTriangle(&scene.materials[2], createVector(556.0, 548.8, 0.0), createVector(0.0, 548.8, 559.2), createVector(556.0, 548.8, 559.2));
+    scene.triangles[6] = createTriangle(&scene.materials[2], createVector(556.0, 548.8, 0.0), createVector(0.0, 548.8, 559.2), createVector(0.0, 548.8, 0.0));
+    scene.triangles[7] = createTriangle(&scene.materials[2], createVector(556.0, 548.8, 0.0), createVector(556.0, 548.8, 559.2), createVector(0.0, 548.8, 559.2));
 
     // Backwall
     scene.triangles[8] = createTriangle(&scene.materials[2], createVector(556.0, 0.0, 559.2), createVector(0.0, 0.0, 559.2), createVector(0.0, 548.8, 559.2));
@@ -62,10 +62,14 @@ Scene createScene(char* filename){
     scene.triangles[23] = createTriangle(&scene.materials[2], createVector(423.0, 0.0, 247.0), createVector(472.0, 330.0, 406.0), createVector(472.0, 0.0, 406.0));
     scene.triangles[24] = createTriangle(&scene.materials[2], createVector(472.0, 0.0, 406.0), createVector(472.0, 330.0, 406.0), createVector(314.0, 330.0, 456.0));
     scene.triangles[25] = createTriangle(&scene.materials[2], createVector(472.0, 0.0, 406.0), createVector(314.0, 330.0, 456.0), createVector(314.0, 0.0, 456.0));
-    scene.triangles[26] = createTriangle(&scene.materials[2], createVector(314.0, 0.0, 456.0), createVector(314.0, 330.0, 456.0), createVector(256.0, 330.0, 296.0));
-    scene.triangles[27] = createTriangle(&scene.materials[2], createVector(314.0, 0.0, 456.0), createVector(256.0, 330.0, 296.0), createVector(256.0, 0.0, 296.0));
-    scene.triangles[28] = createTriangle(&scene.materials[2], createVector(265.0, 0.0, 296.0), createVector(256.0, 330.0, 296.0), createVector(423.0, 330.0, 247.0));
+    scene.triangles[26] = createTriangle(&scene.materials[2], createVector(314.0, 0.0, 456.0), createVector(314.0, 330.0, 456.0), createVector(265.0, 330.0, 296.0));
+    scene.triangles[27] = createTriangle(&scene.materials[2], createVector(314.0, 0.0, 456.0), createVector(265.0, 330.0, 296.0), createVector(265.0, 0.0, 296.0));
+    scene.triangles[28] = createTriangle(&scene.materials[2], createVector(265.0, 0.0, 296.0), createVector(265.0, 330.0, 296.0), createVector(423.0, 330.0, 247.0));
     scene.triangles[29] = createTriangle(&scene.materials[2], createVector(265.0, 0.0, 296.0), createVector(423.0, 330.0, 247.0), createVector(423.0, 0.0, 247.0));
+
+    // Area Light
+    scene.triangles[30] = createTriangle(&scene.materials[3], createVector(343.0, 548.7, 227.0), createVector(343.0, 548.7, 332.0), createVector(213.0, 548.7, 332.0));
+    scene.triangles[31] = createTriangle(&scene.materials[3], createVector(343.0, 548.7, 227.0), createVector(213.0, 548.7, 332.0), createVector(213.0, 548.7, 227.0));
 
     scene.num_lights = 2;
     scene.lights = malloc(scene.num_lights * sizeof(Triangle));
@@ -83,7 +87,7 @@ void destroyScene(Scene* scene){
 }
 
 void renderScene(Scene* scene){
-	Color result;
+	Color final_color;
 	HitRecord record = createHitRecord();
     Sample sample = createSample(scene->num_samples);
 
@@ -98,27 +102,40 @@ void renderScene(Scene* scene){
             getSamples(&sample);
             applyFilter(&sample);
 
-            result = black;
+            final_color = black;
 
+            int hit_count = 0;
             for(int k = 0; k < scene->num_samples; k++){
                 double x = 2 * (i - xres/2. + sample.samples[k].x)/xres;
                 double y = 2 * (j - yres/2. + sample.samples[k].y)/yres;
 
                 Ray ray = cameraCreateRay(&scene->camera, x, -y);
                 resetHitRecord(&record);
-
-                for(int k = 0; k < scene->num_triangles; k++){
-                    hitTriangle(&scene->triangles[k], &record, ray);
-                }
-
-                if(record.has_hit){
-                    result = addColors(result, shadeWithMaterial(scene, &record, ray));
+                Color result = hitScene(scene, &record, ray, 0);
+                if(result.red != 0 || result.green != 0 || result.blue != 0){
+                    final_color = addColors(final_color, result);
+                    hit_count++;
                 }
             }
 
-            result = multiplyColorByNumber(result, 1.0 / (double)scene->num_samples);
+            if(hit_count > 0){
+                final_color = multiplyColorByNumber(final_color, 1.0 / (double)hit_count);
+            }
 
-			setImageColor(&scene->image, i, j, result);
+			setImageColor(&scene->image, i, j, final_color);
 		}
 	}
+}
+
+Color hitScene(struct Scene* scene, struct HitRecord* record, Ray ray, int depth){
+    Color result = {0, 0, 0};
+    for(int k = 0; k < scene->num_triangles; k++){
+        hitTriangle(&scene->triangles[k], record, ray);
+    }
+
+    if(record->has_hit){
+        result = addColors(result, shadeWithMaterial(scene, record, ray, depth));
+    }
+
+    return result;
 }
